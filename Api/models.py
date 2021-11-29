@@ -14,7 +14,7 @@ class Student(models.Model):
     
     
 class Attendance(models.Model):
-    student_id = models.ForeignKey(Student,on_delete=models.CASCADE)
+    student_id = models.ForeignKey(Student,on_delete=models.CASCADE,related_name='attendances')
     date = models.DateField(auto_now_add=True)
     
     def __str__(self):
