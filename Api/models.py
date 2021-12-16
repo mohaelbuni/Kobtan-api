@@ -5,17 +5,18 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class Student(models.Model):
     name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255,blank=True)
-    birth_date = models.DateField()
-    phone_number = PhoneNumberField(blank=True)
+    address = models.CharField(max_length=255,blank=True,null=True)
+    birth_date = models.DateField(blank=True,null=True)
+    phone_number = PhoneNumberField(blank=True,null=True)
     
     def __str__(self):
         return self.name
     
     
 class Attendance(models.Model):
-    student_id = models.ForeignKey(Student,on_delete=models.CASCADE,related_name='attendances')
-    date = models.DateField(auto_now_add=True)
+    sid = models.ForeignKey(Student,on_delete=models.CASCADE,related_name='attendances')
+    date = models.DateField()
+    attend = models.BooleanField(default=False)
     
     def __str__(self):
         return str(self.date)

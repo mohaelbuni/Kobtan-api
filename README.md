@@ -2,21 +2,34 @@
 Kobtan api source code
 
 # Users:
-•	Register user
-•	Login user
-•	Get user profile
+•	Register user <!-- DON -->
+•	Login user <!-- DON -->
+•	Get user profile <!-- DON -->
+•	(user with admin permission) GET all users  <!-- DON -->
 # Students:
-•	Get all students
-•	Add student
-•	Edit student
-•	Get student by id
+•	Get all students <!-- DON -->
+•	Add student <!-- DON -->
+•	delete student <!-- DON -->
+•	update student <!-- DON -->
+•	Get student by id <!-- DON -->
 # Attendances:
-•	Add list of students’ attendances
+•	Add list of students’ attendances         
+    {                                                        
+    "date":"2021-12-15",                                       
+    "attend":["6","3"]                                         
+    }                                                          
+•	remove list of students attendaces
+    {                                                        
+    "date":"2021-12-15",                                       
+    "attend":["6","3"]                                         
+    } 
+•	get all Attendances by date
+
 # Tasks:
 •	Get the last task by type
 •	Add Task 
 •	Update Task
 •	Delete Task
-•	Get all tasks by student must be paginated
+•	Get all student tasks by student_id must be paginated
 
 

@@ -3,13 +3,26 @@ from django.urls import path
 from Api.views import user_views as views 
 
 urlpatterns = [
-    path('', views.getUsers, name='users'),
+    # users urls
     path('register/', views.registerUser, name='register'),
     path('login/', views.MyTokenObtainPairView.as_view() , name='token_obtain_pair'),
+    path('users/', views.getUsers, name='users'),
     path('profile/', views.getUserProfile, name='users-profile'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    # task urls
-    path('tasks/<int:student_id>',views.getTasks , name='tasks'),
-    path('attendances/<str:date>',views.getAttendances , name='tasks'),
-    path('student/<int:student_id>',views.getStudent , name='tasks'),
+    # students urls
+    path('students/',views.getAllStudents , name='all-student'),
+    path('student/<int:student_id>',views.getStudentById , name='student'),
+    path('student/add',views.addStudent , name='add-student'),
+    path('student/delete/<int:student_id>',views.deleteStudent , name='delete-student'),
+    path('student/update/<int:student_id>',views.updateStudent , name='update-student'),
+    
+    
+    
+    # tasks urls
+    path('student/<int:student_id>/tasks/',views.getAllStudentTasks , name='tasks'),
+    # attendances urls
+    path('attend/add',views.addAttendList , name='add-attend'),
+    path('attend/remove',views.removeAttend , name='remove-attend'),
+    path('attend/<str:date>',views.getAttendByDate , name='attend'),
+    
 ]
