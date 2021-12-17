@@ -19,7 +19,11 @@ urlpatterns = [
     
     
     # tasks urls
-    path('student/<int:student_id>/tasks/',views.getAllStudentTasks , name='tasks'),
+    path('student/task/add',views.addTask,name='add-task'),
+    path('student/<int:sid>/tasks/',views.getAllStudentTasks , name='tasks'),
+    path('student/tasks/<int:sid>',views.getAllStudentTasksPaginated.as_view() , name='ptasks'),
+    # path('student/task/update/<int:tid>',views.updateStudentTaskByTaskId, name='update-ptasks'),
+    path('student/last-tasks/<int:sid>',views.getLastTasksBySid,name='get-last-tasks'),
     # attendances urls
     path('attend/add',views.addAttendList , name='add-attend'),
     path('attend/remove',views.removeAttend , name='remove-attend'),

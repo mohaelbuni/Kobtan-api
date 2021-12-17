@@ -23,10 +23,11 @@ class Attendance(models.Model):
     
                    
 class Task(models.Model):
-    info = models.CharField(max_length=400)
-    student_id = models.ForeignKey(Student,on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User,on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
+    info = models.CharField(max_length=400,blank=True,null=True)
+    sid = models.ForeignKey(Student,on_delete=models.CASCADE)
+    uid = models.ForeignKey(User,on_delete=models.CASCADE)
+    date = models.DateField()
+    creation_date= models.DateTimeField(auto_now_add=True)
     
     class Task_Type(models.TextChoices):
         READING = "READING"
@@ -40,7 +41,7 @@ class Task(models.Model):
     )
     
     def __str__(self):
-        return self.info
+        return self.type
     
     
     

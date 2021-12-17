@@ -32,10 +32,17 @@ class UserSerializerWithToken(UserSerializer):
 # --------------- Task serializers -----------------
 
 class TaskSerializer(serializers.ModelSerializer):
-    
+    student_name = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Task
         fields = '__all__'
+        
+    def get_student_name(self,obj):
+        student_name = str(obj.sid)
+        return student_name
+    def get_user_name(self,obj):
+        user_name = str(obj.uid)
+        return user_name
     
 # ----------------- attendance serializers --------------------
 

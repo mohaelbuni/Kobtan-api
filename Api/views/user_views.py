@@ -11,6 +11,8 @@ from django.contrib.auth.hashers import make_password
 from rest_framework import serializers, status
 from Api.models import Task, Attendance, Student
 import datetime
+from rest_framework import generics
+
 
 # ==============================
 # ======== Users Routes ========
@@ -188,21 +190,88 @@ def getAttendByDate(request,date):
 # ================================
 
 # add student Task
-# update student Task
-# remove student Task
-# Get the last task by type
-# Get all student tasks by student_id must be paginated
+# @permission_classes([IsAuthenticated])
+@api_view(['POST'])
+def addTask(requset):
+    data = requset.data
+    uid = data['uid'] ; sid = data['sid']
+    try:
+        student = Student.objects.get(id=data['sid'])
+        user = User.objects.get(id=data['uid'])
+    except Student.DoesNotExist:
+        message = {'details': f'Student with (id:{sid}) does not exists!!,'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    except User.DoesNotExist:
+        message = {'details': f'User with (id:{uid}) does not exists!!,'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        print('start')
+        task = Task(sid=student,uid=user,info=data['info'],type=data['type'],date=data['date'])
+        print('end')
+        task.save()
+    except:
+        message = {'details': 'something went wrong!!!,'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    serializer = TaskSerializer(task,many=False)
+    return Response({"info":"Task added Successfully👍👍","task":serializer.data}) 
+    
+    
+# update student Task by task id
+# @api_view(['GET'])
+# # @permission_classes([IsAuthenticated])
+# def updateStudentTaskByTaskId(request,tid):
+#     task = Task.objects.get(id=tid)
+#     serializer = TaskSerializer(task, many=False)
+#     return Response(serializer.data)
 
-# get all Task for a specific student, %% we need to add pagination to it.
+
+# remove student Task
+
+
+# Get the last task by type
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getAllStudentTasks(request,student_id):
-    tasks = Task.objects.filter(student_id=student_id)
-    print(tasks)
+# @permission_classes([IsAuthenticated])
+def getLastTasksBySid(request,sid):
+    types=["READING","WRITING","REVISION"]
+    result=[]
+    for t in types:
+        try:
+            tasks = Task.objects.filter(sid=sid,type=t).order_by('-creation_date')[:1]
+            if len(tasks) == 0:
+                continue
+            else:
+                serializer = TaskSerializer(tasks[0], many=False)
+                result.append(serializer.data)
+        except Task.DoesNotExist:
+            continue
+               
+    return Response({"tasks":result}) 
+
+# get all Task for a specific student
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def getAllStudentTasks(request,sid):
+    tasks = Task.objects.filter(sid=sid).order_by("sid")
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
 
+# Get all student tasks by student_id must be paginated
+# get_queryset():
+# Used by ListViews - it determines the list of objects that you want to display.
+# By default, it will just give you all for the model you specify.
+# By overriding this method you can extend or completely replace this logic.
+
+class getAllStudentTasksPaginated(generics.ListAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    # permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        qs = super().get_queryset() 
+        return qs.filter(sid=self.kwargs['sid'])
+
+
+    
 
 
 
